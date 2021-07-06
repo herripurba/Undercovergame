@@ -15,6 +15,23 @@ nicknames = []
 
 # function
 
+# Menentukan role dan memberi kata kunci masing2 role
+
+
+def kirimRole(imposName, kata):
+    for client in clients:
+        if (nicknames[clients.index(client)] == imposName):
+            # message = "Kata Kunci Anda"+kata[0]
+            client.send("Kata kunci anda : ".encode('utf-8') +
+                        kata[0].encode('utf-8')+"\n".encode('utf-8'))
+            # client.send(message.encode('utf-8'))
+        else:
+            # message = "Anda Civillian"
+            client.send("Kata kunci anda : ".encode('utf-8') +
+                        kata[1].encode('utf-8')+"\n".encode('utf-8'))
+            # client.send("Anda Civillian\n".encode('utf-8'))
+
+
 # broadcast untuk ngirim pesen ke semua client
 
 
@@ -50,7 +67,6 @@ def receive():
         # untuk nicknames
         client.send("NICK".encode('utf-8'))
         nickname = client.recv(1024)
-        print("tes :", nickname[0])
 
         nicknames.append(nickname)
         clients.append(client)
@@ -74,6 +90,9 @@ def receive():
                 else:
                     print("role anda: Civillian")
                     print("kata kunci anda: ", kataKunci[1])
+
+            kirimRole(impostor, kataKunci)
+
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
 
