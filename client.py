@@ -1,22 +1,24 @@
-import socket 
+import socket
 import threading
 import tkinter
-import tkinter.scrolledtext 
+import tkinter.scrolledtext
 from tkinter import simpledialog
 
 HOST = '127.0.0.1'
 PORT = 9090
 
+
 class Client:
-    def __init__(self, host , port):
+    def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
 
         msg = tkinter.Tk()
         msg.withdraw()
 
-        #input nickname buat ask string
-        self.nickname = simpledialog.askstring("Nickname", "Tulis Nickname", parent=msg)
+        # input nickname buat ask string
+        self.nickname = simpledialog.askstring(
+            "Nickname", "Tulis Nickname", parent=msg)
 
         self.gui_done = False
         self.running = True
@@ -35,7 +37,8 @@ class Client:
         self.chat_label.config(font=("Impact", 12), fg="#FFFFFF")
         self.chat_label.pack(padx=20, pady=5)
 
-        self.text_area = tkinter.scrolledtext.ScrolledText(self.win, bg="#cdd1f7")
+        self.text_area = tkinter.scrolledtext.ScrolledText(
+            self.win, bg="#cdd1f7")
         self.text_area.pack(padx=20, pady=5)
         self.text_area.config(state='disabled')
 
@@ -46,7 +49,8 @@ class Client:
         self.input_area = tkinter.Text(self.win, height=3, bg="#cdd1f7")
         self.input_area.pack(padx=20, pady=5)
 
-        self.send_button = tkinter.Button(self.win, text="Send", command=self.write, bg="#4ccca4")
+        self.send_button = tkinter.Button(
+            self.win, text="Send", command=self.write, bg="#4ccca4")
         self.send_button.config(font=("Impact", 12), fg="#FFFFFF")
         self.send_button.pack(padx=20, pady=5)
 
@@ -73,6 +77,7 @@ class Client:
                 message = self.sock.recv(1024)
                 if message == 'NICK':
                     self.sock.send(self.nickname.encode('utf-8'))
+                    print(self.nickname)
                 else:
                     if self.gui_done:
                         self.text_area.config(state='normal')
@@ -85,5 +90,6 @@ class Client:
                 print("error")
                 self.sock.close()
                 break
+
 
 client = Client(HOST, PORT)

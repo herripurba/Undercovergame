@@ -1,5 +1,6 @@
 import socket
 import threading
+import role
 
 HOST = '127.0.0.1'
 PORT = 9090
@@ -12,14 +13,18 @@ server.listen()
 clients = []
 nicknames = []
 
-#function
+# function
 
-#broadcast untuk ngirim pesen ke semua client
+# broadcast untuk ngirim pesen ke semua client
+
+
 def broadcast(message):
     for client in clients:
         client.send(message)
 
-#handle untuk handle connection
+# handle untuk handle connection
+
+
 def handle(client):
     while True:
         try:
@@ -34,15 +39,18 @@ def handle(client):
             nicknames.remove(nickname)
             break
 
-#receive untuk accept connection baru/client baru 
+# receive untuk accept connection baru/client baru
+
+
 def receive():
     while True:
         client, address = server.accept()
         print(f"Konek dengan {str(address)}!")
 
-        #untuk nicknames
+        # untuk nicknames
         client.send("NICK".encode('utf-8'))
         nickname = client.recv(1024)
+        print("tes :", nickname[0])
 
         nicknames.append(nickname)
         clients.append(client)
@@ -51,8 +59,24 @@ def receive():
         broadcast(f"{nickname} tersambung dalam server!\n".encode('utf-8'))
         client.send("Terkonek dalam server \n".encode('utf-8'))
 
-        thread = threading.Thread(target=handle, args = (client,))
+        print(nicknames)
+        print(clients)
+
+        if (len(nicknames) == 3):
+            impostor = role.pickImpostor(nicknames)
+            kataKunci = role.kataKunci()
+
+            for name in nicknames:
+                print("nama anda: ", name)
+                if(name == impostor):
+                    print("role anda: Impostor")
+                    print("kata kunci anda: ", kataKunci[0])
+                else:
+                    print("role anda: Civillian")
+                    print("kata kunci anda: ", kataKunci[1])
+        thread = threading.Thread(target=handle, args=(client,))
         thread.start()
+
 
 print("Server running")
 receive()
