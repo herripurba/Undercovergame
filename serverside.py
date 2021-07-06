@@ -15,6 +15,17 @@ nicknames = []
 
 # function
 
+# Mengirim Urutan pemberian desk kata kunci
+
+
+def Urutan(arr):
+    check = 1
+    for client in arr:
+        client.send("Anda Urutan ke ".encode('utf-8') +
+                    str(check).encode('utf-8')+"\n".encode('utf-8'))
+        check += 1
+
+
 # Menentukan role dan memberi kata kunci masing2 role
 
 
@@ -81,6 +92,7 @@ def receive():
         if (len(nicknames) == 3):
             impostor = role.pickImpostor(nicknames)
             kataKunci = role.kataKunci()
+            urutan = role.shuffle(clients)
 
             for name in nicknames:
                 print("nama anda: ", name)
@@ -92,6 +104,7 @@ def receive():
                     print("kata kunci anda: ", kataKunci[1])
 
             kirimRole(impostor, kataKunci)
+            Urutan(urutan)
 
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
