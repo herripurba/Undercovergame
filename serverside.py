@@ -92,7 +92,6 @@ def receive():
         if (len(nicknames) == 3):
             impostor = role.pickImpostor(nicknames)
             kataKunci = role.kataKunci()
-            urutan = role.shuffle(clients)
 
             for name in nicknames:
                 print("nama anda: ", name)
@@ -104,6 +103,7 @@ def receive():
                     print("kata kunci anda: ", kataKunci[1])
 
             kirimRole(impostor, kataKunci)
+            urutan = role.shuffle(clients)
             Urutan(urutan)
 
         thread = threading.Thread(target=handle, args=(client,))
