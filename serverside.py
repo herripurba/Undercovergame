@@ -57,8 +57,34 @@ def handle(client):
     while True:
         try:
             message = client.recv(1024)
+            mes = message.decode('utf-8')
+            firstNic = nicknames[0]
             print(f"{nicknames[clients.index(client)]} says {message}")
-            broadcast(message)
+            if(mes[:5] == "start" and len(nicknames) >= 3 and firstNic == nicknames[clients.index(client)]):
+                print("Berhasil")
+                impostor = role.pickImpostor(nicknames)
+                kataKunci = role.kataKunci()
+                urutan = role.shuffle(clients)
+
+                print("urutan\n", urutan)
+                for name in nicknames:
+                    print("nama anda: ", name)
+                    if(name == impostor):
+                        print("role anda: Impostor")
+                        print("kata kunci anda: ", kataKunci[0])
+                    else:
+                        print("role anda: Civillian")
+                        print("kata kunci anda: ", kataKunci[1])
+
+                kirimRole(impostor, kataKunci)
+                Urutan(urutan)
+            elif(mes[:5] == "start" and len(nicknames) < 3 and firstNic == nicknames[clients.index(client)]):
+                pesan = "Pemain masih kurang dari 3 pemain"
+                client.send(pesan.encode('utf-8'))
+            elif(mes[:5] == "start"):
+                continue
+            else:
+                broadcast(message)
         except:
             index = clients.index(client)
             clients.remove(client)
@@ -89,22 +115,22 @@ def receive():
         print(nicknames)
         print(clients)
 
-        if (len(nicknames) == 3):
-            impostor = role.pickImpostor(nicknames)
-            kataKunci = role.kataKunci()
+        # if (len(nicknames) == 3):
+        #     impostor = role.pickImpostor(nicknames)
+        #     kataKunci = role.kataKunci()
 
-            for name in nicknames:
-                print("nama anda: ", name)
-                if(name == impostor):
-                    print("role anda: Impostor")
-                    print("kata kunci anda: ", kataKunci[0])
-                else:
-                    print("role anda: Civillian")
-                    print("kata kunci anda: ", kataKunci[1])
+        #     for name in nicknames:
+        #         print("nama anda: ", name)
+        #         if(name == impostor):
+        #             print("role anda: Impostor")
+        #             print("kata kunci anda: ", kataKunci[0])
+        #         else:
+        #             print("role anda: Civillian")
+        #             print("kata kunci anda: ", kataKunci[1])
 
-            kirimRole(impostor, kataKunci)
-            urutan = role.shuffle(clients)
-            Urutan(urutan)
+        #     kirimRole(impostor, kataKunci)
+        #     urutan = role.shuffle(clients)
+        #     Urutan(urutan)
 
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
