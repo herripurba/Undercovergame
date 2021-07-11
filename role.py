@@ -7,8 +7,8 @@ def pickImpostor(val):
 
 
 def kataKunci():
-    kata = [["sampho", "sabun"], ["Bergandengan", "Berpelukan"],
-            ["CR7", "messi"], ["windows", "window"]]
+    kata = [["shampo", "sabun"], ["Bergandengan", "Berpelukan"],
+            ["CR7", "messi"], ["windows", "window"], ["pulpen", "pensil"] ]
 
     kataTerpilih = random.choice(kata)
 

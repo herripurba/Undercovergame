@@ -84,7 +84,7 @@ def receive():
 
         print(f"Nickname dari client adalah {nickname}!")
         broadcast(f"{nickname} tersambung dalam server!\n".encode('utf-8'))
-        client.send("Terkonek dalam server \n".encode('utf-8'))
+        client.send("Tersambung dalam server \n".encode('utf-8'))
 
         print(nicknames)
         print(clients)
