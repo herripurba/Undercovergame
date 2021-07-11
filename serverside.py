@@ -79,10 +79,11 @@ def handle(client):
                 kirimRole(impostor, kataKunci)
                 Urutan(urutan)
             elif(mes[:5] == "start" and len(nicknames) < 3 and firstNic == nicknames[clients.index(client)]):
-                pesan = "Pemain masih kurang dari 3 pemain"
+                pesan = "Pemain masih kurang dari 3 pemain\n"
                 client.send(pesan.encode('utf-8'))
-            elif(mes[:5] == "start"):
-                continue
+            elif(mes[:5] == "start" and firstNic != nicknames[clients.index(client)]):
+                pesan = "Hanya player 1 yang dapat memulai game\n"
+                client.send(pesan.encode('utf-8'))
             else:
                 broadcast(message)
         except:

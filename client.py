@@ -36,38 +36,50 @@ class Client:
         self.win = tkinter.Tk()
         self.win.configure(bg="#2E3047", padx=10, pady=10)
 
-        self.vote_label = tkinter.Label(
+        self.title_label = tkinter.Label(
             self.win, text="Undercover", bg="#2E3047")
-        self.vote_label.config(font=("Impact", 30), fg="#4ecca3")
+        self.title_label.config(font=("Impact", 30), fg="#4ecca3")
         # self.chat_label.pack(padx=20, pady=5)
-        self.vote_label.grid(column=0, columnspan=4, row=0, pady=20)
+        self.title_label.grid(column=0, columnspan=3, row=0, pady=20)
+
+        self.vote_label = tkinter.Label(
+            self.win, text="Vote", bg="#2E3047")
+        self.vote_label.config(font=("Impact", 15), fg="#FFFFFF")
+        # self.vote_label.pack(padx=20, pady=5)
+        self.vote_label.grid(column=0, columnspan=3, pady=15)
 
         self.player1_label = tkinter.Label(
             self.win, text="Player 1", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
-        self.player1_label.grid(column=0, row=1, padx=5)
+        self.player1_label.grid(column=0, row=2, padx=5)
 
         self.player2_label = tkinter.Label(
             self.win, text="Player 2", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
-        self.player2_label.grid(column=1, row=1, padx=5)
+        self.player2_label.grid(column=1, row=2, padx=5)
 
         self.player3_label = tkinter.Label(
             self.win, text="Player 3", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
-        self.player3_label.grid(column=2, row=1, padx=5)
+        self.player3_label.grid(column=2, row=2, padx=5)
 
         self.vote1_button = tkinter.Button(
-            self.win, text="Player 1", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
-        self.vote1_button.grid(column=0, row=2, padx=5, pady=5)
+            self.win, text="Vote", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
+        self.vote1_button.grid(column=0, row=3, padx=5, pady=5)
 
         self.vote2_button = tkinter.Button(
-            self.win, text="Player 2", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
-        self.vote2_button.grid(column=1, row=2, padx=5, pady=5)
+            self.win, text="Vote", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
+        self.vote2_button.grid(column=1, row=3, padx=5, pady=5)
 
         self.vote3_button = tkinter.Button(
-            self.win, text="Player 3", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
-        self.vote3_button.grid(column=2, row=2, padx=5, pady=5)
+            self.win, text="Vote", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
+        self.vote3_button.grid(column=2, row=3, padx=5, pady=5)
+
+        self.chat_label = tkinter.Label(
+            self.win, text="T4 Kata Kunci", bg="#2E3047")
+        self.chat_label.config(font=("Impact", 20), fg="#FFFFFF")
+        # self.chat_label.pack(padx=20, pady=5)
+        self.chat_label.grid(column=0, columnspan=3, pady=15)
 
         self.chat_label = tkinter.Label(self.win, text="Chat", bg="#2E3047")
-        self.chat_label.config(font=("Impact", 12), fg="#FFFFFF")
+        self.chat_label.config(font=("Impact", 15), fg="#FFFFFF")
         # self.chat_label.pack(padx=20, pady=5)
         self.chat_label.grid(column=0, columnspan=3)
 
