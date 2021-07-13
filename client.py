@@ -76,6 +76,7 @@ class Client:
             self.win, text="Kata Kunci Anda", bg="#2E3047")
         self.judul_kata_label.config(font=("Impact", 15), fg="#FFFFFF")
         # self.judul_kata_label.pack(padx=20, pady=5)
+
         self.judul_kata_label.grid(column=0, columnspan=3, pady=5)
         self.kata_label = tkinter.Label(
             self.win, text=" ", bg="#2E3047")
