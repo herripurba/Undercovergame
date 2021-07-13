@@ -72,11 +72,16 @@ class Client:
             self.win, text="Vote", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
         self.vote3_button.grid(column=2, row=3, padx=5, pady=5)
 
-        self.chat_label = tkinter.Label(
-            self.win, text="T4 Kata Kunci", bg="#2E3047")
-        self.chat_label.config(font=("Impact", 20), fg="#FFFFFF")
-        # self.chat_label.pack(padx=20, pady=5)
-        self.chat_label.grid(column=0, columnspan=3, pady=15)
+        self.judul_kata_label = tkinter.Label(
+            self.win, text="Kata Kunci Anda", bg="#2E3047")
+        self.judul_kata_label.config(font=("Impact", 15), fg="#FFFFFF")
+        # self.judul_kata_label.pack(padx=20, pady=5)
+        self.judul_kata_label.grid(column=0, columnspan=3, pady=5)
+        self.kata_label = tkinter.Label(
+            self.win, text=" ", bg="#2E3047")
+        self.kata_label.config(font=("Impact", 20), fg="#FFFFFF")
+        # self.kata_label.pack(padx=20, pady=5)
+        self.kata_label.grid(column=0, columnspan=3, pady=15)
 
         self.chat_label = tkinter.Label(self.win, text="Chat", bg="#2E3047")
         self.chat_label.config(font=("Impact", 15), fg="#FFFFFF")
@@ -135,13 +140,17 @@ class Client:
         while self.running:
             try:
                 message = self.sock.recv(1024)
+                mes = message.decode('utf-8')
+                if(mes[:4] == "Kata"):
+                    self.kata_label["text"] = mes[18:-1]
+
                 if message == 'NICK':
                     self.sock.send(self.nickname.encode('utf-8'))
                     print(self.nickname)
                 else:
                     if self.gui_done:
                         self.text_area.config(state='normal')
-                        self.text_area.insert('end', message)
+                        self.text_area.insert('end', mes)
                         self.text_area.yview('end')
                         self.text_area.config(state='disabled')
             except ConnectionAbortedError:
