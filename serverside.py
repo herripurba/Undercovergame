@@ -15,6 +15,16 @@ nicknames = []
 
 # function
 
+# Fungsi untuk mengirim list nicknames ke client
+
+
+def kirimNicnames(num):
+    for client in clients:
+        tes = clients[num]
+        message = "player".encode(
+            'utf-8')+str(num).encode('utf-8')+nicknames[clients.index(tes)]+"\n".encode('utf-8')
+        client.send(message)
+
 # Mengirim Urutan pemberian desk kata kunci
 
 
@@ -64,9 +74,9 @@ def handle(client):
                 print("Berhasil")
                 impostor = role.pickImpostor(nicknames)
                 kataKunci = role.kataKunci()
-                urutan = role.shuffle(clients)
+                # urutan = role.shuffle(clients)
 
-                print("urutan\n", urutan)
+                # print("urutan\n", urutan)
                 for name in nicknames:
                     print("nama anda: ", name)
                     if(name == impostor):
@@ -77,7 +87,9 @@ def handle(client):
                         print("kata kunci anda: ", kataKunci[1])
 
                 kirimRole(impostor, kataKunci)
-                Urutan(urutan)
+                for num in range(len(nicknames)):
+                    kirimNicnames(num)
+                # Urutan(urutan)
             elif(mes[:5] == "start" and len(nicknames) < 3 and firstNic == nicknames[clients.index(client)]):
                 pesan = "Pemain masih kurang dari 3 pemain\n"
                 client.send(pesan.encode('utf-8'))
@@ -115,23 +127,6 @@ def receive():
 
         print(nicknames)
         print(clients)
-
-        # if (len(nicknames) == 3):
-        #     impostor = role.pickImpostor(nicknames)
-        #     kataKunci = role.kataKunci()
-
-        #     for name in nicknames:
-        #         print("nama anda: ", name)
-        #         if(name == impostor):
-        #             print("role anda: Impostor")
-        #             print("kata kunci anda: ", kataKunci[0])
-        #         else:
-        #             print("role anda: Civillian")
-        #             print("kata kunci anda: ", kataKunci[1])
-
-        #     kirimRole(impostor, kataKunci)
-        #     urutan = role.shuffle(clients)
-        #     Urutan(urutan)
 
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()

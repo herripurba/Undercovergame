@@ -145,6 +145,15 @@ class Client:
                 if(mes[:4] == "Kata"):
                     self.kata_label["text"] = mes[18:-1]
 
+                if(mes[:7] == 'player0'):
+                    split = mes.split("\n")
+                    if(split[0][:7] == 'player0'):
+                        self.player1_label["text"] = split[0][7:]
+                    if(split[1][:7] == 'player1'):
+                        self.player2_label["text"] = split[1][7:]
+                    if(split[2][:7] == 'player2'):
+                        self.player3_label["text"] = split[2][7:]
+
                 if message == 'NICK':
                     self.sock.send(self.nickname.encode('utf-8'))
                     print(self.nickname)
