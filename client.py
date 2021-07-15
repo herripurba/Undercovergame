@@ -176,10 +176,15 @@ class Client:
             try:
                 message = self.sock.recv(1024)
                 mes = message.decode('utf-8')
-                if(mes[:4] == "Kata"):
+
+                if message == 'NICK':
+                    self.sock.send(self.nickname.encode('utf-8'))
+                    print(self.nickname)
+
+                elif(mes[:4] == "Kata"):
                     self.kata_label["text"] = mes[18:-1]
 
-                if(mes[:7] == 'player0'):
+                elif(mes[:7] == 'player0'):
                     # self.sock.send(mes.encode('utf-8'))
                     # self.sock.send("pesan nama palyrt : ".encode('utf-8') +
                     #                mes.encode('utf-8')+"\n".encode('utf-8'))
@@ -191,7 +196,7 @@ class Client:
                     if(split[2][:7] == 'player2'):
                         self.player3_label["text"] = split[2][7:]
 
-                if(mes[:15] == "JmlhVotePlayer0"):
+                elif(mes[:15] == "JmlhVotePlayer0"):
                     # self.sock.send("pesan : ".encode('utf-8') +
                     #                mes.encode('utf-8')+"\n".encode('utf-8'))
                     split = mes.split("\n")
@@ -202,14 +207,11 @@ class Client:
                     if(split[2][:15] == 'JmlhVotePlayer2'):
                         self.voteCount3_label["text"] = split[2][15:]
 
-                if(mes[:6] == "Winner"):
+                elif(mes[:6] == "Winner"):
                     self.sock.send("pesan : ".encode('utf-8') +
                                    mes.encode('utf-8')+"\n".encode('utf-8'))
                     self.info_label["text"] = mes[7:-1]
 
-                if message == 'NICK':
-                    self.sock.send(self.nickname.encode('utf-8'))
-                    print(self.nickname)
                 else:
                     if self.gui_done:
                         self.text_area.config(state='normal')

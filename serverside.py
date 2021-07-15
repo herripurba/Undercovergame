@@ -13,6 +13,7 @@ server.listen()
 clients = []
 nicknames = []
 votes = []
+chanceVotes = []
 impostors = []
 
 # function
@@ -130,21 +131,27 @@ def handle(client):
             elif(sum(votes) >= 3):
                 pesan = "Tidak dapat melakukan vote lagi\n"
                 client.send(pesan.encode('utf-8'))
-            elif(clients.index(client) != 0 and mes[:11] == "VotePlayer1" and sum(votes) < 3):
+            elif(clients.index(client) != 0 and mes[:11] == "VotePlayer1" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1):
+                chanceVotes[clients.index(
+                    client)] = chanceVotes[clients.index(client)]-1
                 votes[0] = votes[0]+1
                 print("masuk1")
                 sendJumlahVote()
                 # client.send(impostors[1])
                 if(sum(votes) == 3):
                     checkWinner()
-            elif(clients.index(client) != 1 and mes[:11] == "VotePlayer2" and sum(votes) < 3):
+            elif(clients.index(client) != 1 and mes[:11] == "VotePlayer2" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1):
+                chanceVotes[clients.index(
+                    client)] = chanceVotes[clients.index(client)]-1
                 votes[1] = votes[1]+1
                 print("masuk1")
                 sendJumlahVote()
                 # client.send(impostors[1])
                 if(sum(votes) == 3):
                     checkWinner()
-            elif(clients.index(client) != 2 and mes[:11] == "VotePlayer3" and sum(votes) < 3):
+            elif(clients.index(client) != 2 and mes[:11] == "VotePlayer3" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1):
+                chanceVotes[clients.index(
+                    client)] = chanceVotes[clients.index(client)]-1
                 votes[2] = votes[2]+1
                 print("masuk1")
                 sendJumlahVote()
@@ -159,6 +166,9 @@ def handle(client):
                 client.send(mess.encode('utf-8'))
             elif(clients.index(client) == 2 and mes[:11] == "VotePlayer3"):
                 mess = "Anda tidak dapat memvote anda sendiri\n"
+                client.send(mess.encode('utf-8'))
+            elif(chanceVotes[clients.index(client)] == 0):
+                mess = "Anda tidak dapat melakukan vote lagi\n"
                 client.send(mess.encode('utf-8'))
             else:
                 broadcast(message)
@@ -182,11 +192,13 @@ def receive():
         client.send("NICK".encode('utf-8'))
         nickname = client.recv(1024)
         a = 0
+        chanceVote = 1
         # tes = "asdad"
 
         nicknames.append(nickname)
         clients.append(client)
         votes.append(a)
+        chanceVotes.append(chanceVote)
         # impostors.append(tes)
 
         print(f"Nickname dari client adalah {nickname}!")
