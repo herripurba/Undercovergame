@@ -15,6 +15,7 @@ nicknames = []
 votes = []
 chanceVotes = []
 impostors = []
+stateVote = []
 
 # function
 
@@ -68,6 +69,8 @@ def Urutan(arr):
 
 def kirimRole(imposName, kata):
     impostors.append(imposName)
+    stateVotes = 0
+    stateVote.append(stateVotes)
     for client in clients:
         if (nicknames[clients.index(client)] == imposName):
             # message = "Kata Kunci Anda"+kata[0]
@@ -122,6 +125,11 @@ def handle(client):
                 for num in range(len(nicknames)):
                     kirimNicnames(num)
                 # Urutan(urutan)
+            elif(mes[:13] == "Vote Starting" and len(nicknames) >= 3 and firstNic == nicknames[clients.index(client)] and stateVote[0] == 0):
+                    stateVote[0] = 1
+            elif(mes[:13] == "Vote Starting" and len(nicknames) >= 3 and firstNic != nicknames[clients.index(client)] and stateVote[0] == 0):
+                pesan = "Hanya player 1 yang dapat memulai Vote\n"
+                client.send(pesan.encode('utf-8'))
             elif(mes[:5] == "start" and len(nicknames) < 3 and firstNic == nicknames[clients.index(client)]):
                 pesan = "Pemain masih kurang dari 3 pemain\n"
                 client.send(pesan.encode('utf-8'))
@@ -131,7 +139,7 @@ def handle(client):
             elif(sum(votes) >= 3):
                 pesan = "Tidak dapat melakukan vote lagi\n"
                 client.send(pesan.encode('utf-8'))
-            elif(clients.index(client) != 0 and mes[:11] == "VotePlayer1" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1):
+            elif(clients.index(client) != 0 and mes[:11] == "VotePlayer1" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1 and stateVote[0] == 1):
                 chanceVotes[clients.index(
                     client)] = chanceVotes[clients.index(client)]-1
                 votes[0] = votes[0]+1
@@ -140,7 +148,7 @@ def handle(client):
                 # client.send(impostors[1])
                 if(sum(votes) == 3):
                     checkWinner()
-            elif(clients.index(client) != 1 and mes[:11] == "VotePlayer2" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1):
+            elif(clients.index(client) != 1 and mes[:11] == "VotePlayer2" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1 and stateVote[0] == 1):
                 chanceVotes[clients.index(
                     client)] = chanceVotes[clients.index(client)]-1
                 votes[1] = votes[1]+1
@@ -149,7 +157,7 @@ def handle(client):
                 # client.send(impostors[1])
                 if(sum(votes) == 3):
                     checkWinner()
-            elif(clients.index(client) != 2 and mes[:11] == "VotePlayer3" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1):
+            elif(clients.index(client) != 2 and mes[:11] == "VotePlayer3" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1 and stateVote[0] == 1):
                 chanceVotes[clients.index(
                     client)] = chanceVotes[clients.index(client)]-1
                 votes[2] = votes[2]+1
@@ -169,6 +177,9 @@ def handle(client):
                 client.send(mess.encode('utf-8'))
             elif(chanceVotes[clients.index(client)] == 0):
                 mess = "Anda tidak dapat melakukan vote lagi\n"
+                client.send(mess.encode('utf-8'))
+            elif(stateVote[0] == 0 and (mes[:11] == "VotePlayer1" or mes[:11] == "VotePlayer2" or mes[:11] == "VotePlayer3")):
+                mess = "Vote belom dimulai\n"
                 client.send(mess.encode('utf-8'))
             else:
                 broadcast(message)
@@ -199,6 +210,7 @@ def receive():
         clients.append(client)
         votes.append(a)
         chanceVotes.append(chanceVote)
+        
         # impostors.append(tes)
 
         print(f"Nickname dari client adalah {nickname}!")

@@ -93,6 +93,10 @@ class Client:
         self.vote3_button = tkinter.Button(
             self.win, text="Vote", padx=5, pady=5, command=self.votePlayer3, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
         self.vote3_button.grid(column=2, row=5, padx=5, pady=5)
+        
+        self.voteStart_button = tkinter.Button(
+            self.win, text="Mulai Vote", padx=5, pady=5, command=self.voteStart, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
+        self.voteStart_button.grid(column=1, row=6, padx=5, pady=5)
 
         self.judul_kata_label = tkinter.Label(
             self.win, text="Kata Kunci Anda", bg="#2E3047")
@@ -148,6 +152,10 @@ class Client:
         message = "start\n"
         self.sock.send(message.encode('utf-8'))
 
+    def voteStart(self):
+        message = "Vote Starting\n"
+        self.sock.send(message.encode('utf-8'))
+        
     def votePlayer1(self):
         message = "VotePlayer1\n"
         self.sock.send(message.encode('utf-8'))
