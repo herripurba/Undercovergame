@@ -9,6 +9,10 @@ HOST = '127.0.0.1'
 PORT = 9090
 
 
+def apeloh():
+    pass
+
+
 class Client:
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,6 +46,12 @@ class Client:
         # self.chat_label.pack(padx=20, pady=5)
         self.title_label.grid(column=0, columnspan=3, row=0, pady=20)
 
+        self.info_label = tkinter.Label(
+            self.win, text="Information", bg="#2E3047")
+        self.info_label.config(font=("Impact", 15), fg="#FFFFFF")
+        # self.info_label.pack(padx=20, pady=5)
+        self.info_label.grid(column=0, columnspan=3)
+
         self.vote_label = tkinter.Label(
             self.win, text="Vote", bg="#2E3047")
         self.vote_label.config(font=("Impact", 15), fg="#FFFFFF")
@@ -50,27 +60,39 @@ class Client:
 
         self.player1_label = tkinter.Label(
             self.win, text="Player 1", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
-        self.player1_label.grid(column=0, row=2, padx=5)
+        self.player1_label.grid(column=0, row=3, padx=5)
 
         self.player2_label = tkinter.Label(
             self.win, text="Player 2", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
-        self.player2_label.grid(column=1, row=2, padx=5)
+        self.player2_label.grid(column=1, row=3, padx=5)
 
         self.player3_label = tkinter.Label(
             self.win, text="Player 3", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
-        self.player3_label.grid(column=2, row=2, padx=5)
+        self.player3_label.grid(column=2, row=3, padx=5)
+
+        self.voteCount1_label = tkinter.Label(
+            self.win, text="0", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
+        self.voteCount1_label.grid(column=0, row=4, padx=5)
+
+        self.voteCount2_label = tkinter.Label(
+            self.win, text="0", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
+        self.voteCount2_label.grid(column=1, row=4, padx=5)
+
+        self.voteCount3_label = tkinter.Label(
+            self.win, text="0", padx=5, pady=5, fg="#FFFFFF", bg="#2E3047", font=("Impact", 12))
+        self.voteCount3_label.grid(column=2, row=4, padx=5)
 
         self.vote1_button = tkinter.Button(
-            self.win, text="Vote", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
-        self.vote1_button.grid(column=0, row=3, padx=5, pady=5)
+            self.win, text="Vote", padx=5, pady=5, command=self.votePlayer1, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
+        self.vote1_button.grid(column=0, row=5, padx=5, pady=5)
 
         self.vote2_button = tkinter.Button(
-            self.win, text="Vote", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
-        self.vote2_button.grid(column=1, row=3, padx=5, pady=5)
+            self.win, text="Vote", padx=5, pady=5, command=self.votePlayer2, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
+        self.vote2_button.grid(column=1, row=5, padx=5, pady=5)
 
         self.vote3_button = tkinter.Button(
-            self.win, text="Vote", padx=5, pady=5, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
-        self.vote3_button.grid(column=2, row=3, padx=5, pady=5)
+            self.win, text="Vote", padx=5, pady=5, command=self.votePlayer3, bg="#4ccca4", fg="#FFFFFF", font=("Impact", 12))
+        self.vote3_button.grid(column=2, row=5, padx=5, pady=5)
 
         self.judul_kata_label = tkinter.Label(
             self.win, text="Kata Kunci Anda", bg="#2E3047")
@@ -126,6 +148,18 @@ class Client:
         message = "start\n"
         self.sock.send(message.encode('utf-8'))
 
+    def votePlayer1(self):
+        message = "VotePlayer1\n"
+        self.sock.send(message.encode('utf-8'))
+
+    def votePlayer2(self):
+        message = "VotePlayer2\n"
+        self.sock.send(message.encode('utf-8'))
+
+    def votePlayer3(self):
+        message = "VotePlayer3\n"
+        self.sock.send(message.encode('utf-8'))
+
     def write(self):
         message = f"{self.nickname}: {self.input_area.get('1.0', 'end')}"
         self.sock.send(message.encode('utf-8'))
@@ -146,6 +180,9 @@ class Client:
                     self.kata_label["text"] = mes[18:-1]
 
                 if(mes[:7] == 'player0'):
+                    # self.sock.send(mes.encode('utf-8'))
+                    # self.sock.send("pesan nama palyrt : ".encode('utf-8') +
+                    #                mes.encode('utf-8')+"\n".encode('utf-8'))
                     split = mes.split("\n")
                     if(split[0][:7] == 'player0'):
                         self.player1_label["text"] = split[0][7:]
@@ -153,6 +190,22 @@ class Client:
                         self.player2_label["text"] = split[1][7:]
                     if(split[2][:7] == 'player2'):
                         self.player3_label["text"] = split[2][7:]
+
+                if(mes[:15] == "JmlhVotePlayer0"):
+                    # self.sock.send("pesan : ".encode('utf-8') +
+                    #                mes.encode('utf-8')+"\n".encode('utf-8'))
+                    split = mes.split("\n")
+                    if(split[0][:15] == 'JmlhVotePlayer0'):
+                        self.voteCount1_label["text"] = split[0][15:]
+                    if(split[1][:15] == 'JmlhVotePlayer1'):
+                        self.voteCount2_label["text"] = split[1][15:]
+                    if(split[2][:15] == 'JmlhVotePlayer2'):
+                        self.voteCount3_label["text"] = split[2][15:]
+
+                if(mes[:6] == "Winner"):
+                    self.sock.send("pesan : ".encode('utf-8') +
+                                   mes.encode('utf-8')+"\n".encode('utf-8'))
+                    self.info_label["text"] = mes[7:-1]
 
                 if message == 'NICK':
                     self.sock.send(self.nickname.encode('utf-8'))
