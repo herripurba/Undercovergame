@@ -26,8 +26,10 @@ gameStart = [0]
 def checkWinner():
     voteTerbesar = max(votes)
     print(nicknames[votes.index(voteTerbesar)])
-    if(nicknames[votes.index(voteTerbesar)] == impostors[0]):
-        print("masok")
+    if(voteTerbesar == 1):
+        for client in clients:
+            client.send("Winner Game Tied\n".encode('utf-8'))
+    elif(nicknames[votes.index(voteTerbesar)] == impostors[0]):
         for client in clients:
             client.send("Winner Civillian Win\n".encode('utf-8'))
     else:
@@ -134,7 +136,7 @@ def handle(client):
 
             # Menghitung jumlah orang yang sudah melakukan vote agar tidak dapat memvote lagi jika jumlahnya sudah sesuai banyak pemain
             elif(sum(votes) >= 3):
-                pesan = "Tidak dapat melakukan vote lagi\n"
+                pesan = "Permainan telah berakhir\n"
                 client.send(pesan.encode('utf-8'))
 
             # Mengecek jika pemain menekan tombol vote dan game belum dimulai
@@ -213,7 +215,7 @@ def handle(client):
 def receive():
     while True:
         client, address = server.accept()
-        print(f"Konek dengan {str(address)}!")
+        print(f"{str(address)} Berhasil Terhubung")
 
         # untuk nicknames
         client.send("NICK".encode('utf-8'))
