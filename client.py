@@ -46,7 +46,7 @@ class Client:
         self.title_label.grid(column=0, columnspan=3, row=0, pady=20)
 
         self.info_label = tkinter.Label(
-            self.win, text="Information", bg="#2E3047")
+            self.win, text=" ", bg="#2E3047")
         self.info_label.config(font=("Impact", 15), fg="#FFFFFF")
         self.info_label.grid(column=0, columnspan=3)
 
