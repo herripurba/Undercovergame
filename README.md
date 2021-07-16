@@ -1,3 +1,4 @@
+
 # UndercoverGame
 
 **Panduan Penggunaan**
@@ -19,7 +20,7 @@ Jika semua vote berjumlah sama, maka game akan berakhir imbang.
 
 **Library**
 
-Tkinter
-Thread
-Socket
-Random
+ - Tkinter 
+ - Thread 
+ - Socket 
+ - Random
