@@ -22,7 +22,8 @@ def kataKunci():
             ["Piring", "Mangkok"], ["Tali", "Benang"],
             ["Komik", "Novel"], ["Buku", "Majalah"], ["Bulu", "Rambut"],
             ["Angsa", "Bebek"], ["Sepeda", "Motor"],
-            ["Anak Panah", "Tombak"], ["Lift", "Eskalator"], ["Lumba-Lumba", "Pesut"],
+            ["Anak Panah", "Tombak"], ["Lift", "Eskalator"], [
+                "Lumba-Lumba", "Pesut"],
             ["Penyu", "Kura-Kura"], ["Kepiting", "Rajungan"],
             ["Mie", "Bihun"], ["Pangsit", "Siomay"], ["Cumi", "Gurita"],
             ["Kubus", "Balok"], ["Lengkuas", "Jahe"],
@@ -37,15 +38,3 @@ def kataKunci():
     kataTerpilih = random.choice(kata)
 
     return kataTerpilih
-
-
-def shuffle(arr):
-    for n in range(len(arr) - 1):
-        rnd = random.randint(0, (len(arr) - 1))
-        val1 = arr[rnd]
-        val2 = arr[rnd - 1]
-
-        arr[rnd - 1] = val1
-        arr[rnd] = val2
-
-    return arr

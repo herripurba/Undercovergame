@@ -21,12 +21,8 @@ gameStart = [0]
 
 
 def checkWinner():
-    # pass
     voteTerbesar = max(votes)
     print(nicknames[votes.index(voteTerbesar)])
-    # for client in clients:
-    #     client.send("Vote Terbesar: ".encode('utf-8') +
-    #                 str(voteTerbesar).encode('utf-8')+"\n".encode('utf-8'))
     if(nicknames[votes.index(voteTerbesar)] == impostors[0]):
         print("masok")
         for client in clients:
@@ -38,7 +34,6 @@ def checkWinner():
 
 def sendJumlahVote():
     for client in clients:
-        # tes = clients[num]
         message = "JmlhVotePlayer0".encode('utf-8')+str(votes[0]).encode('utf-8')+"\n".encode('utf-8')+"JmlhVotePlayer1".encode('utf-8')+str(
             votes[1]).encode('utf-8')+"\n".encode('utf-8')+"JmlhVotePlayer2".encode('utf-8')+str(votes[2]).encode('utf-8')+"\n".encode('utf-8')
         client.send(message)
@@ -53,16 +48,6 @@ def kirimNicnames(num):
             'utf-8')+str(num).encode('utf-8')+nicknames[clients.index(tes)]+"\n".encode('utf-8')
         client.send(message)
 
-# Mengirim Urutan pemberian desk kata kunci
-
-
-def Urutan(arr):
-    check = 1
-    for client in arr:
-        client.send("Anda Urutan ke ".encode('utf-8') +
-                    str(check).encode('utf-8')+"\n".encode('utf-8'))
-        check += 1
-
 
 # Menentukan role dan memberi kata kunci masing2 role
 
@@ -71,18 +56,14 @@ def kirimRole(imposName, kata):
     impostors.append(imposName)
     stateVotes = 0
     stateVote.append(stateVotes)
-    gameStart [0] = 1
+    gameStart[0] = 1
     for client in clients:
         if (nicknames[clients.index(client)] == imposName):
-            # message = "Kata Kunci Anda"+kata[0]
             client.send("Kata kunci anda : ".encode('utf-8') +
                         kata[0].encode('utf-8')+"\n".encode('utf-8'))
-            # client.send(message.encode('utf-8'))
         else:
-            # message = "Anda Civillian"
             client.send("Kata kunci anda : ".encode('utf-8') +
                         kata[1].encode('utf-8')+"\n".encode('utf-8'))
-            # client.send("Anda Civillian\n".encode('utf-8'))
     print(impostors[0], type(impostors[0]))
 
 
@@ -97,22 +78,19 @@ def broadcast(message):
 
 
 def handle(client):
-    
+
     while True:
         try:
             message = client.recv(1024)
             mes = message.decode('utf-8')
             firstNic = nicknames[0]
             print(f"{nicknames[clients.index(client)]} says {message}")
-            # print(impostors[3], type(impostors[3]))
 
-            if(mes[:5] == "start" and len(nicknames) >= 3 and firstNic == nicknames[clients.index(client)] and gameStart [0] == 0):
+            if(mes[:5] == "start" and len(nicknames) >= 3 and firstNic == nicknames[clients.index(client)] and gameStart[0] == 0):
                 print("Berhasil")
                 impostor = role.pickImpostor(nicknames)
                 kataKunci = role.kataKunci()
-                # urutan = role.shuffle(clients)
 
-                # print("urutan\n", urutan)
                 for name in nicknames:
                     print("nama anda: ", name)
                     if(name == impostor):
@@ -125,70 +103,82 @@ def handle(client):
                 kirimRole(impostor, kataKunci)
                 for num in range(len(nicknames)):
                     kirimNicnames(num)
-                
+
                 # Urutan(urutan)
             elif(mes[:13] == "Vote Starting" and (firstNic != nicknames[clients.index(client)] or firstNic == nicknames[clients.index(client)]) and gameStart[0] == 0):
                 pesan = "Harap Start Game Terlebih dahulu\n"
                 client.send(pesan.encode('utf-8'))
+
             elif(mes[:13] == "Vote Starting" and len(nicknames) >= 3 and firstNic == nicknames[clients.index(client)] and stateVote[0] == 0 and gameStart[0] == 1):
-                    stateVote[0] = 1
+                stateVote[0] = 1
+
             elif(mes[:13] == "Vote Starting" and len(nicknames) >= 3 and firstNic != nicknames[clients.index(client)] and stateVote[0] == 0 and gameStart[0] == 1):
                 pesan = "Hanya player 1 yang dapat memulai Vote\n"
                 client.send(pesan.encode('utf-8'))
+
             elif(mes[:5] == "start" and len(nicknames) < 3 and firstNic == nicknames[clients.index(client)] and gameStart[0] == 0):
                 pesan = "Pemain masih kurang dari 3 pemain\n"
                 client.send(pesan.encode('utf-8'))
+
             elif(mes[:5] == "start" and firstNic != nicknames[clients.index(client)] and gameStart[0] == 0):
                 pesan = "Hanya player 1 yang dapat memulai game\n"
                 client.send(pesan.encode('utf-8'))
+
             elif(sum(votes) >= 3):
                 pesan = "Tidak dapat melakukan vote lagi\n"
                 client.send(pesan.encode('utf-8'))
+
             elif((mes[:11] == "VotePlayer1" or mes[:11] == "VotePlayer2" or mes[:11] == "VotePlayer3") and gameStart[0] == 0):
                 mess = "Harap Start Game Terlebih Dahulu\n"
                 client.send(mess.encode('utf-8'))
+
             elif(clients.index(client) != 0 and mes[:11] == "VotePlayer1" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1 and stateVote[0] == 1 and gameStart[0] == 1):
                 chanceVotes[clients.index(
                     client)] = chanceVotes[clients.index(client)]-1
                 votes[0] = votes[0]+1
                 print("masuk1")
                 sendJumlahVote()
-                # client.send(impostors[1])
                 if(sum(votes) == 3):
                     checkWinner()
+
             elif(clients.index(client) != 1 and mes[:11] == "VotePlayer2" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1 and stateVote[0] == 1 and gameStart[0] == 1):
                 chanceVotes[clients.index(
                     client)] = chanceVotes[clients.index(client)]-1
                 votes[1] = votes[1]+1
                 print("masuk1")
                 sendJumlahVote()
-                # client.send(impostors[1])
                 if(sum(votes) == 3):
                     checkWinner()
+
             elif(clients.index(client) != 2 and mes[:11] == "VotePlayer3" and sum(votes) < 3 and chanceVotes[clients.index(client)] == 1 and stateVote[0] == 1 and gameStart[0] == 1):
                 chanceVotes[clients.index(
                     client)] = chanceVotes[clients.index(client)]-1
                 votes[2] = votes[2]+1
                 print("masuk1")
                 sendJumlahVote()
-                # client.send(impostors[1])
                 if(sum(votes) == 3):
                     checkWinner()
+
             elif(clients.index(client) == 0 and mes[:11] == "VotePlayer1" and gameStart[0] == 1):
                 mess = "Anda tidak dapat memvote anda sendiri\n"
                 client.send(mess.encode('utf-8'))
+
             elif(clients.index(client) == 1 and mes[:11] == "VotePlayer2" and gameStart[0] == 1):
                 mess = "Anda tidak dapat memvote anda sendiri\n"
                 client.send(mess.encode('utf-8'))
+
             elif(clients.index(client) == 2 and mes[:11] == "VotePlayer3" and gameStart[0] == 1):
                 mess = "Anda tidak dapat memvote anda sendiri\n"
                 client.send(mess.encode('utf-8'))
+
             elif(chanceVotes[clients.index(client)] == 0 and gameStart[0] == 1):
                 mess = "Anda tidak dapat melakukan vote lagi\n"
                 client.send(mess.encode('utf-8'))
+
             elif(stateVote[0] == 0 and (mes[:11] == "VotePlayer1" or mes[:11] == "VotePlayer2" or mes[:11] == "VotePlayer3") and gameStart[0] == 1):
                 mess = "Vote belom dimulai\n"
                 client.send(mess.encode('utf-8'))
+
             else:
                 broadcast(message)
         except:
@@ -212,14 +202,11 @@ def receive():
         nickname = client.recv(1024)
         a = 0
         chanceVote = 1
-        # tes = "asdad"
 
         nicknames.append(nickname)
         clients.append(client)
         votes.append(a)
         chanceVotes.append(chanceVote)
-        
-        # impostors.append(tes)
 
         print(f"Nickname dari client adalah {nickname}!")
         broadcast(f"{nickname} tersambung dalam server!\n".encode('utf-8'))
