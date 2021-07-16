@@ -137,26 +137,32 @@ class Client:
 
         self.win.mainloop()
 
+    # Comand buat tombol start
     def start(self):
         message = "start\n"
         self.sock.send(message.encode('utf-8'))
 
+    # Comand buat tombol vote start
     def voteStart(self):
         message = "Vote Starting\n"
         self.sock.send(message.encode('utf-8'))
 
+    # Comand buat tombol vote player1
     def votePlayer1(self):
         message = "VotePlayer1\n"
         self.sock.send(message.encode('utf-8'))
 
+    # Comand buat tombol vote player2
     def votePlayer2(self):
         message = "VotePlayer2\n"
         self.sock.send(message.encode('utf-8'))
 
+    # Comand buat tombol vote player3
     def votePlayer3(self):
         message = "VotePlayer3\n"
         self.sock.send(message.encode('utf-8'))
 
+    # Menghandle pengiriman pesan
     def write(self):
         message = f"{self.nickname}: {self.input_area.get('1.0', 'end')}"
         self.sock.send(message.encode('utf-8'))
@@ -178,9 +184,11 @@ class Client:
                     self.sock.send(self.nickname.encode('utf-8'))
                     print(self.nickname)
 
+                # Mengganti label kata kunci jika game sudah dimulai
                 elif(mes[:4] == "Kata"):
                     self.kata_label["text"] = mes[18:-1]
 
+                # Mengganti label player menjadi nickname masing masing jika game sudah dimulai
                 elif(mes[:7] == 'player0'):
                     split = mes.split("\n")
                     if(split[0][:7] == 'player0'):
@@ -190,6 +198,7 @@ class Client:
                     if(split[2][:7] == 'player2'):
                         self.player3_label["text"] = split[2][7:]
 
+                # Mengganti label vote count jika vote sudah dimulai
                 elif(mes[:15] == "JmlhVotePlayer0"):
                     split = mes.split("\n")
                     if(split[0][:15] == 'JmlhVotePlayer0'):
@@ -199,6 +208,7 @@ class Client:
                     if(split[2][:15] == 'JmlhVotePlayer2'):
                         self.voteCount3_label["text"] = split[2][15:]
 
+                # Mengganti label Informasi menjadi siapa pemenang jika vote sudah selesai
                 elif(mes[:6] == "Winner"):
                     self.sock.send("pesan : ".encode('utf-8') +
                                    mes.encode('utf-8')+"\n".encode('utf-8'))

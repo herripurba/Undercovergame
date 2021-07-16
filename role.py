@@ -1,9 +1,13 @@
 import random
 
+# Memilih impostor
+
 
 def pickImpostor(val):
     impostor = random.choice(val)
     return impostor
+
+# Memilih kata kunci
 
 
 def kataKunci():
